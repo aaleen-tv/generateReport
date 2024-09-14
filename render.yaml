@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: Generate PDF Report
+    env: node
+    region: singapore # You can change the region based on your location
+    buildCommand: "npm install"
+    startCommand: "node app.js"  # or whatever your main file is called (e.g., app.js)
+    autoDeploy: true
+    plan: free # Or select another plan if needed
+    envVars:
+      - key: NODE_ENV
+        value: production

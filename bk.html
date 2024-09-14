@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Screening Report</title>
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            margin: 40px;
+            color: #333;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            color: #333;
+            font-weight: 500;
+            margin: 0px;
+        }
+
+        h3 {
+            color: #313345;
+            font-weight: 500;
+            margin: 0px;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .content p {
+            margin: 5px 0;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+            color: #ff622d;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        .header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+        }
+
+        .title {
+            font-weight: 550;
+            color: #313345;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        .title-head {
+            font-weight: 550;
+            color: #333;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        .section {
+            border: 1px solid #EEEEEE;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0px;
+        }
+
+        .section-candidate {
+            width: 27%;
+            box-shadow: 0 0px 4px 0 #ff622d63, 0 0px 1px 0 #ff622d8c;
+
+        }
+
+        .section-summary {
+            width: 60%;
+            box-shadow: 0 0px 4px 0 #ff622d63, 0 0px 1px 0 #ff622d8c;
+
+        }
+
+        .section-question {
+            box-shadow: 0 0px 4px 0 #eee, 0 0px 1px 0 #eee;
+
+        }
+        .section-interview-summary {
+            box-shadow: 0 0px 4px 0 #ff622d63, 0 0px 1px 0 #ff622d8c;
+        }
+
+        .section-intro {
+            box-shadow: 0 0px 4px 0 #eee, 0 0px 1px 0 #eee;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .separator {
+            width: 100%;
+            height: 1px;
+            background-color: #eee;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .common-section {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between
+        }
+
+        .question-number {
+            padding: 8px;
+            font-weight: bold;
+        }
+
+        .question-title {
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .difficulty-easy {
+            padding: 8px;
+            font-size: 14px;
+            background-color: #EDF7ED;
+            color: #1D4620;
+            border-radius: 6px;
+            width: fit-content;
+        }
+
+        .difficulty-moderate {
+            padding: 8px;
+            font-size: 14px;
+            background-color: #FFF4E5;
+            color: #663C00;
+            border-radius: 6px;
+            width: fit-content;
+        }
+
+        .difficulty-hard {
+            padding: 8px;
+            font-size: 14px;
+            background-color: #FDEDED;
+            color: #5F2120;
+            border-radius: 6px;
+            width: fit-content;
+        }
+
+        .time-taken {
+            padding: 8px;
+            font-size: 14px;
+            background-color: #E5F6FD;
+            color: #014361;
+            border-radius: 6px;
+            width: fit-content;
+            margin-left: 8px;
+        }
+
+        .score-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            border: 1px solid #ccc;
+            border-style: dashed;
+            border-radius: 6px;
+            padding: 8px;
+        }
+
+        .score {
+            margin: 0px;
+            color: #1D4620;
+            font-weight: bold;
+        }
+
+        .score-low {
+            color: #D74544;
+        }
+
+        .score-moderate {
+            color: #EF7B2A;
+        }
+
+        .score-high {
+            color: #458946;
+        }
+
+        .score-caption {
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            padding: 10px 0px;
+        }
+
+        .text-color {
+            color: #5A6175
+        }
+
+        .score-box {
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;         
+        }
+
+        .answer-container {
+            padding: 20px 0px;
+            
+        }
+        .answer-transcript-title {
+            color: #333;
+        }
+
+        .answer-transcript-body {
+            color: #5A6175;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .donut-chart {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #ff622d 0% 60%,  /* Percentage of the first slice */
+                #ccc 60% 100%    /* Remaining percentage */
+            );
+            position: relative;
+        }
+
+        .donut-chart::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50px;  /* Adjust this to control the size of the inner circle */
+            height: 50px; /* Adjust this to control the size of the inner circle */
+            background-color: white;  /* Color of the donut hole */
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .avoid-page-break {
+             page-break-inside: avoid;
+             break-inside: avoid;
+        }
+
+        ai-text {
+            background-color: #E5F6FD;
+            color: #014361;
+            border-radius: 6px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="header">
+
+        <div>
+            <h2>AI Assessment Report for <span style="font-weight: bold;">{{candidateName}}</span></h2>
+            <!-- <div style="display: flex; align-items: center;">
+            <p style="font-size: 16px; color: #BBBBBB; margin-top: 0px; margin-bottom: 0px; text-align: left;">Powered by <span
+                    style="color: #ff622d;">Hireomatic</span>
+                </p>
+                <img src="https://hireomaticclient.pages.dev/HireomaticFavIcon.png" style="height: 50px; width: 50px;" alt="hireomatic_logo" >
+            </div> -->
+            <div style="display: flex; align-items: center;">
+                <p style="font-size: 16px; color: #BBBBBB; margin-top: 0px; margin-bottom: 0px; text-align: left;">
+                    
+                   ( JobId - <span style="color: #333333; font-weight: bold;">#1223</span>
+                    | InterviewId - <span style="color: #333333; font-weight: bold;">#312</span>
+                   )
+                    
+                </p>
+            </div>
+        </div>
+        <img 
+        src="https://pub-d3ff552702f14bc4a61b371e528a10b8.r2.dev/profiles/1726206286554-logoc5aea918-55ca-40ea-a291-1cf8f609ec01.logoc5aea918-55ca-40ea-a291-1cf8f609ec01" alt="company_logo" width="60">
+
+        <!-- <img src="https://hireomaticclient.pages.dev/HireomaticFavIcon.png" alt="hireomatic_logo" width="100"> -->
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="section section-intro">
+        <img src="https://pub-432839ea3a84406aa983043621813162.r2.dev/profiles/ai.png" style="height: 60px; width: 60px;" alt="ai">
+            <p class="text-color" style="margin-left: 16px;">This AI screening process offers an impartial, bias-free evaluation, eliminating human biases and ensuring the genuine representation of candidates' skills. It provides a dependable and transparent assessment of abilities, resulting in more trustworthy information.
+            </p>        
+    </div>
+
+
+    <div class="common-section">
+        <div class="section section-candidate">
+            <h3>Candidate Info</h3>
+            <div class="content">
+
+                <!-- <p style="color: #5A6175;"><span class="title">Name: </span>Aaleen Mirza</p> -->
+                <p style="color: #333; font-weight: bold; font-size: 14px;">Name:  
+                    <p style="color: #5A6175;">{{candidateName}}</p>
+                </p>
+
+                <p style="color: #333; font-weight: bold; font-size: 14px; margin-top: 12px;">Email:  
+                    <p style="color: #5A6175;">{{candidateEmail}}</p>
+                </p>
+
+                <p style="color: #333; font-weight: bold;font-size: 14px; margin-top: 12px;">Contact:  
+                    <p style="color: #5A6175;">{{candidateContact}}</p>
+                </p>
+
+                
+            </div>
+        </div>
+
+        <div class="section section-summary avoid-page-break">
+                <h3>Screening Summary</h3>
+            <div class="content">
+                    <div>
+
+                        <div class="common-section">
+
+                            <div class="flex-row">
+                                <div class="score-box">
+                                    <span style="font-size: 14px; color: #5A6175;">Questions</span>
+                                    <h2 style="margin-top: 6px; color: #333; font-weight: bold;">{{totalQuestions}}</h2>
+                                </div>
+    
+                                <div class="score-box" style="margin-left: 26px;">                                
+                                    <span style="font-size: 14px; color: #5A6175;">Score</span>
+                                   <h2 style="margin-top: 6px; color: #333; font-weight: bold;">{{score}}</h2>
+                                </div>
+    
+                                <div class="score-box" style="margin-left: 26px;">
+                                    <span style="font-size: 14px; color: #5A6175;">Percentage</span>
+                                <h2 style="margin-top: 6px; color: #333; font-weight: bold;">{{percentage}}%</h2>
+                                </div>
+    
+                            </div>
+
+                            
+                             <div style="display: flex; flex-direction: column; justify-content: center;align-items: center; margin-right: 30px;">
+                                <div class="donut-chart"></div>
+                            </div>
+
+                        </div>
+                        
+
+                        <h4 style="margin-bottom: 0px;">Screened for</h4>
+
+                        <p style="color: #5A6175;"><span class="title">Role: </span>{{role}}</p>
+                        <p style="color: #5A6175;"><span class="title">Years of Experience: </span>{{experience}} yrs</p>
+                        <!-- <p style="color: #5A6175;"><span class="title">Required Skills: </span>{{requiredSkills}}</p> -->
+                        <!-- <p style="color: #5A6175;"><span class="title">Optional Skills: </span>{{optionalSkills}} -->
+                        </p>
+
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section section-question avoid-page-break">
+        <h3>Test Schedule</h3>
+            <div style="display: flex; flex-direction: row; ">
+
+                <div>
+                    <p style="color: #333; font-weight: bold;font-size: 14px; margin-top: 12px;margin: 5px 0px;">Completion Date:  
+                        <p style="color: #5A6175;margin: 5px 0px;">{{testCompletionDate}}</p>
+                    </p>
+                </div>
+
+                <div style="margin-left: 30px;">
+                    <p style="color: #333; font-weight: bold;font-size: 14px; margin-top: 12px;margin: 5px 0px;">Start Time:  
+                        <p style="color: #5A6175; margin: 5px 0px;">{{testStartTime}}</p>
+                    </p>
+                </div>
+
+                <div style="margin-left: 30px;">
+                    <p style="color: #333; font-weight: bold;font-size: 14px; margin-top: 12px;margin: 5px 0px;">End Time:  
+                        <p style="color: #5A6175;margin: 5px 0px;">{{testEndTime}}</p>
+                    </p>
+                </div>
+
+            </div>
+    </div>
+
+    <div class="section section-interview-summary avoid-page-break">
+        <h3>AI Interview Summary</h3>
+        <p class="ai-text" style="
+        background-color: #E5F6FD;
+        color: #014361;
+        border-radius: 6px;
+        padding: 20px;
+        ">
+
+            John demonstrated a solid understanding of core React concepts and was able to complete most of the tasks with some guidance. His experience with state management and component lifecycle methods was satisfactory, though there were occasional gaps in his knowledge of more advanced concepts such as performance optimization in React or advanced hooks like useMemo and useCallback.
+
+            He is a competent React developer with a strong foundation in the basics but needs more experience in advanced topics and best practices. He shows potential but would benefit from further mentorship and exposure to complex projects.
+
+            He would be a good fit for a junior to mid-level React developer role where he can continue to develop his skills under supervision.
+
+        </p>
+    </div>
+
+   
+    <div>
+        <div class="content section section-question avoid-page-break">
+            <div class="common-section avoid-page-break">
+                <div style="width: 80%;">
+                    <p class="question-title"> <span class="question-number">1.</span>Question </p>
+                    <div class="flex-row">
+                        <div class="difficulty-${q.difficulty.toLowerCase()}">
+                            Difficulty: Easy</div>
+                        <div class="time-taken">
+                            Time taken: 1 min 2 secs</div>
+                    </div>
+                </div>
+
+                <div style="width: 20%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div class="score-container">
+                    <h2 class="score score-${getScoreClass(q.score)}"> 8/10</h2>
+                    <span class="score-caption">Score</span>
+
+                </div>
+                <div style="padding: 10px; border: 1px solid #014361; color: #014361;  border-radius: 4px; font-size: 12px; margin-top: 8px; font-weight: bold;">  ▶  Review Answer</div>
+            </div>
+            </div>
+
+            <div class="answer-container">
+
+                <p class="answer-transcript-title"><span class="title">Score Summary (AI):</p>
+                <p class="answer-transcript-body" style=" background-color: #E5F6FD;
+        color: #014361;
+        border-radius: 6px;
+        padding: 20px;">${q.aiScoreSummary}</p>
+
+                <p class="answer-transcript-title" style="margin-top:16px"><span class="title">Answer (Transcript):</p>
+                <p class="answer-transcript-body">${q.answer}</p>
+
+            </div>
+        </div>
+    </div>
+
+     <!-- <div class="section section-question avoid-page-break">
+        <h3>Question Reviews</h3>
+        {{qns}} 
+    </div> -->
+
+    
+
+    <div class="footer avoid-page-break">
+        <p>Generated on {{generatedDate}} by Hireomatic AI Assessment</p>
+    </div>
+</body>
+
+</html>
